@@ -1,3 +1,6 @@
+import numpy as np
+import pandas as pd
+
 def Txt2Csv(main_dir,file_name):
     f1 = open(main_dir + file_name,'r')
     # Read all lines
@@ -15,13 +18,10 @@ def Txt2Csv(main_dir,file_name):
     # Allocate Array
     for i in range(num_rows):
         Data_Array[i-first_row_with_data]=np.array(all_lines[i].split()[1::3])
-
-    # Create a DataFrame and save it as CSV
-    csv_name=file_name[0:-4] + ".csv"
-    # Create Heading
+    # Create a DataFrame
     df=pd.DataFrame()
     for i in range(Data_Array.shape[1]):
         df["ROI_" + str(i+1)]=Data_Array[:,i]
         # Write File
         df.to_csv(csv_name)
-     return df
+    return df

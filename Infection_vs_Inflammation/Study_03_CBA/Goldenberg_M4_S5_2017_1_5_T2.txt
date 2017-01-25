@@ -13,4 +13,3 @@ user units  mean     std dev  func  mean     std dev  func  mean     std dev  fu
 0            273619  137992   no      34209  20394.3  no     162183  116051   no      31805   15010   no    
 0            248236  133378   no      27532  15936.5  no     145991  109895   no      24950   11302   no    
 0            230040  128256   no      26977  14550.4  no     138242  101716   no      21480   10307   no    
-

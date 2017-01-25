@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 from pylab import *
 
-def Txt2Csv(main_dir,file_name):
+def Txt2DataFrame(main_dir,file_name):
     f1 = open(main_dir + file_name,'r')
     # Read all lines
     all_lines = f1.readlines()

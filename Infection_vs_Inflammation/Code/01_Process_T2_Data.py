@@ -1,7 +1,19 @@
 import numpy as np
 import pandas as pd
 from pylab import *
+import os
 
+main_dir= "../Study_03_CBA/"
+
+# Create List of T2 MSME data
+file_names=list()
+for file in os.listdir(main_dir):
+    if file.endswith("T2.txt"):
+        file_names.append(file)
+
+Txt2DataFrame(main_dir,file_names[0],12)
+
+# Function to convert txt to data frame
 def Txt2DataFrame(main_dir,file_name,num_rows):
     f1 = open(main_dir + file_name,'r')
     # Read all lines
@@ -25,3 +37,6 @@ def Txt2DataFrame(main_dir,file_name,num_rows):
     df=pd.DataFrame(np_array,columns=column_names)
     #df.plot()
     return df
+
+if __name__ == '__main__':
+    main()

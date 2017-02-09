@@ -56,3 +56,13 @@ def name_2_df(file_name):
     my_df=pd.DataFrame()
     my_df=my_df.from_dict(my_dict,orient='index').transpose()
     return my_df   
+    
+    
+def Lorentzian(sat_offset,Amp,Width,Center):
+    Width = Width**2; Width=Width/4 
+    xdata = (sat_offset-Center)**2
+    return (Amp*Width) / (Width +xdata )
+
+def Lorentzian2(sat_offset,a1,w1,c1,a2,w2,c2):
+    return Lorentzian(sat_offset,a1,w1,c1) + Lorentzian(sat_offset,a2,w2,c2)
+    

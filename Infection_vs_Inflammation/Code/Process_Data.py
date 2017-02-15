@@ -3,7 +3,7 @@ import numpy as np
 #import seaborn as sn
 import pandas as pd
 from pylab import *
-from mylocal_functions import * 
+from mylocal_functions import *
 
 # ======== T2 MSME============= #
 # Make list of all T2.txt files
@@ -25,7 +25,7 @@ for names in T2_list:
     df_final=pd.concat([df_T2,df_info], axis=1)
     T2DF=T2DF.append(df_final,ignore_index=True)
 
-# Plot T2 Density ROIs 1 and 2   
+# Plot T2 Density ROIs 1 and 2
 #T2DF[T2DF.Slice==1].iloc[:,:4].plot.density(); title("Slice 01"); xlim((0.025,.15))
 #T2DF[T2DF.Slice==2].iloc[:,:4].plot.density(); title("Slice 02"); xlim((0.025,.15))
 #T2DF[T2DF.Slice==3].iloc[:,:4].plot.density(); title("Slice 03"); xlim((0.025,.15))
@@ -35,22 +35,26 @@ for names in T2_list:
 
 # ======== CEST============= #
 # Make list of all T2.txt files
-CEST_list = get_ipython().getoutput('ls ../Study_03_CBA/*CEST.txt')
+CEST_list=get_ipython().getoutput('ls ../Study_03_CBA/*CEST.txt')
+CEST_DF=pd.DataFrame()
+Z=np.zeros((4,110))
 
+def normalize_data(DataMatrix):
+    rows,cols = DataMatrix.shape
+    newData = np.zeros_like(DataMatrix)
+    for row in range(rows):
+        newData[row,:]=DataMatrix[row,:]/DataMatrix[row,8]
+    return newData
 
-def scale(y,index):
-    return y/y[index
 for names in CEST_list:
     #Convert txt file to array
-    print(names)
-    Ydata=txt_2_array(names)
-    rows, cols = Ydata.shape
-    for i in range(cols):
-        ydata=Ydata[:,i]; ydata=ydata/ydata[9]; ydata=ydata[9:]
-        integral=np.sum(yd)
+    D=txt_2_array(names);
+    Zn=normalize_data(D.T)
+    Z=np.concatenate((Z,Zn))
 
-s=[1,8,10,100]
-for l in s:
-    plot(scale(Ydata[:,0],l))
-    
+Z=Z[4::,9::]
 
+# define offsets in ppm
+a1=np.linspace(-55,-50,9)
+ppm=np.linspace(-8,8,101)
+full_ppm = np.concatenate((a1, ppm))

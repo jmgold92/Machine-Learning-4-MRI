@@ -57,6 +57,12 @@ def name_2_df(file_name):
     my_df=my_df.from_dict(my_dict,orient='index').transpose()
     return my_df
 
+def normalize_data(DataMatrix,normalization_point):
+    rows,cols = DataMatrix.shape
+    newData = np.zeros_like(DataMatrix)
+    for row in range(rows):
+        newData[row,:]=DataMatrix[row,:]/DataMatrix[row,normalization_point]
+    return newData
 
 def Lorentzian(sat_offset,Amp,Width,Center):
     Width = Width**2; Width=Width/4

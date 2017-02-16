@@ -58,3 +58,36 @@ Z=Z[4::,9::]
 a1=np.linspace(-55,-50,9)
 ppm=np.linspace(-8,8,101)
 full_ppm = np.concatenate((a1, ppm))
+
+
+# fit CEST data.
+y=Z[12,:]
+p=fit_L2_scale(ppm,y)
+Yhat=Lscale(ppm,p[0],p[1],p[2],p[3],p[4],p[5],p[6]);
+
+plt.figure(figsize=(10,6))
+plt.plot(ppm,y,'o',label='Signal'); 
+plt.plot(ppm,1-Yhat,'-',label='Fit'); 
+plt.legend()
+
+## ======   BUILD CEST Predictors ======== #####
+CEST_predictors=np.zeros_like(Z)
+rows,cols = CEST_predictors.shape
+Tissue_Class=np.zeros((4,rows))
+
+for i in range(rows):
+    p=fit_L2_scale(ppm,Z[i,:])
+    CEST_predictors[i,:]=Lscale(ppm,p[0],p[1],p[2],p[3],p[4],p[5],p[6]);
+
+Tissue_Class=np.zeros((64,1))
+
+for i in range(4):
+    Tissue_Class[i::4]=i
+
+
+
+CEST_Dataframe=pd.DataFrame(CEST_predictors)   
+CEST_Dataframe["Tissue_Class"]=Tissue_Class
+
+pd.DataFrame.to_csv(CEST_Dataframe,"CEST_infections.csv",header=True,index=False)
+

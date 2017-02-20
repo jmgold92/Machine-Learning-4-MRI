@@ -72,9 +72,14 @@ def Lorentzian(sat_offset,Amp,Width,Center):
 def Lorentzian2(sat_offset,a1,w1,c1,a2,w2,c2):
     return Lorentzian(sat_offset,a1,w1,c1) + Lorentzian(sat_offset,a2,w2,c2)
 
-
+def Lorentzian3(sat_offset,a1,w1,c1,a2,w2,c2,a3,w3,c3):
+    return Lorentzian(sat_offset,a1,w1,c1) + Lorentzian(sat_offset,a2,w2,c2) + Lorentzian(sat_offset,a3,w3,c3)
+    
 def Lscale(sat_offset,a1,w1,c1,a2,w2,c2,scale):
     return Lorentzian2(sat_offset,a1,w1,c1,a2,w2,c2) + scale
+
+def Lscale3(sat_offset,a1,w1,c1,a2,w2,c2,a3,w3,c3,scale):
+    return Lorentzian3(sat_offset,a1,w1,c1,a2,w2,c2,a3,w3,c3) + scale
 
 def fit_L2_scale(offsets,ydata):
     Signal=1-ydata
@@ -99,3 +104,31 @@ def fit_L2_scale(offsets,ydata):
     p, cov = curve_fit(Lscale, xdata, Signal,p0=initial_guess,bounds=(lb, ub))
 
     return p;
+
+def fit_L3_scale(offsets,ydata):
+    Signal=1-ydata
+    # fix xdata
+    xdata=offsets-offsets[Signal.argmax()]
+    # allocate fitting based on this
+    A10, W10, C10 =  0.90, 1, 0
+    A20, W20, C20 =  .1, 1, -4
+    A30, W30, C30 =  .1, 1, +2
+    
+    A1L, W1L, C1L =  0.5, .1, -.1
+    A2L, W2L, C2L =  0, .1,   -6
+    A3L, W3L, C3L =  0, .1,   +1
+    
+    A1U, W1U, C1U =  1.0, 5, +.1
+    A2U, W2U, C2U =  1.0, 5, -1.0
+    A3U, W3U, C3U =  1.0, 5, +3.0
+    
+    scale0, scaleL, scaleU = 0, -1, +1
+
+    initial_guess = [A10, W10, C10,      A20, W20, C20,    A30, W30, C30,    scale0]
+    lb            = [A1L, W1L, C1L,      A2L, W2L, C2L,    A3L, W3L, C3L,    scaleL]
+    ub            = [A1U, W1U, C1U,      A2U, W2U, C2U,    A3U, W3U, C3U,    scaleU]
+
+    p, cov = curve_fit(Lscale3, xdata, Signal,p0=initial_guess,bounds=(lb, ub))
+
+    return p;
+
